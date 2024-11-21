@@ -4,15 +4,15 @@ type TipoRequestBodyPet = Omit<PetEntity, "id">;
 type TipoRequestParamsPet = { 
     id?:string, 
     pet_id?: string,
-     adotante_id?: string 
+    adotante_id?: string 
 };
 
 type TipoResponseBodyPet = {
-    data?: 
+    dados?: 
         Pick<PetEntity, "id" | "nome" | "porte" | "especie"> |
         Pick<PetEntity, "id" | "nome" | "porte" | "especie">[]
 
-    error?: unknown;
+    erros?: unknown;
 };
 
 export {

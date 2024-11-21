@@ -7,11 +7,11 @@ type TipoRequestParamsAdotante = { id?:string };
 
 //Pick: Conseguimos informar o que ira ser retornado.
 type TipoResponseBodyAdotante = {
-    data?: 
+    dados?: 
         Pick<AdotanteEntity, "id" | "nome" | "celular" | "endereco" > |
         Pick<AdotanteEntity, "id" | "nome" | "celular" | "endereco">[]
 
-    error?: unknown;
+    erros?: unknown;
 };
 
 export {
