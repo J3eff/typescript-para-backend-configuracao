@@ -2,21 +2,24 @@ import { Request, Response } from "express";
 import AdotanteRepository from "../repositories/AdotanteRepository";
 import AdotanteEntity from "../entities/AdotanteEntity";
 import EnderecoEntity from "../entities/Endereco";
+import { TipoRequestBodyAdotante, TipoResponseBodyAdotante } from "../types/tiposAdotante";
 
 export default class AdotanteController {
     constructor(private repository: AdotanteRepository) {}
 
-    async criaAdotante(req: Request, res: Response) {
-        try {
-            const { nome, senha, celular, foto, endereco } = req.body as AdotanteEntity; 
+    async criaAdotante(
+        req: Request<{},{},TipoRequestBodyAdotante>, 
+        res: Response<TipoResponseBodyAdotante>
+    ) {       
+        const { nome, senha, celular, foto, endereco } = req.body as AdotanteEntity; 
 
-            const novoAdotante = new AdotanteEntity(nome, senha, celular, foto, endereco);
+        const novoAdotante = new AdotanteEntity(nome, senha, celular, foto, endereco);
 
-            await this.repository.criaAdotante(novoAdotante);
-            res.status(201).json(novoAdotante);
-        } catch (error) {
-            return res.status(500).json({ error: 'Erro ao criar o adotante' });
-        }
+        await this.repository.criaAdotante(novoAdotante);
+
+        return res
+            .status(201)
+            .json({ data: { id: novoAdotante.id, nome, celular } });        
     }
 
     async atualizaAdotante(req: Request, res: Response) {
