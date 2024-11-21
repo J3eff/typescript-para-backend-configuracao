@@ -3,14 +3,9 @@ import AdotanteEntity from "../entities/AdotanteEntity";
 import InterfaceAdotanteRepository from "./interfaces/InterfaceAdotanteRepository";
 
 export default class AdotanteRepository implements InterfaceAdotanteRepository {
-    private repository: Repository<AdotanteEntity>;
-
-    constructor(repository: Repository<AdotanteEntity>) {
-        this.repository = repository;
-    }
+    constructor(private repository: Repository<AdotanteEntity>) {}
     
-    async criarAdotante(adotante: AdotanteEntity): Promise<void> {
-        await this.repository.save(adotante);
-    }
-    
+    criarAdotante(adotante: AdotanteEntity): void | Promise<void> {
+        this.repository.save(adotante);
+    }    
 }
