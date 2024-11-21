@@ -3,14 +3,6 @@ import AdotanteRepository from "../repositories/AdotanteRepository";
 import AdotanteEntity from "../entities/AdotanteEntity";
 import EnderecoEntity from "../entities/Endereco";
 import { TipoRequestBodyAdotante, TipoResponseBodyAdotante, TipoRequestParamsAdotante } from "../types/tiposAdotante";
-import * as yup from "yup";
-
-const adotanteBodyValidator: yup.ObjectSchema<Omit<TipoRequestBodyAdotante, "endereco">> = yup.object({
-    nome: yup.string().defined().required(),
-    celular: yup.string().defined().required(),
-    senha: yup.string().defined().required().min(6),
-    foto: yup.string().optional(),
-});
 
 export default class AdotanteController {
     constructor(private repository: AdotanteRepository) {}
@@ -21,23 +13,10 @@ export default class AdotanteController {
     ) {       
         const { nome, senha, celular, foto, endereco } = req.body as AdotanteEntity; 
 
-        let bodyValidated:TipoRequestBodyAdotante
-
-        try {
-            bodyValidated = await adotanteBodyValidator.validate(req.body,  { abortEarly: false })
-        } catch (error) {
-            const yupErrors = error as yup.ValidationError;
-            const validationErrors: Record<string, string>= {};
-            yupErrors.inner.forEach(err =>  {
-                if(!err.path) return;
-                validationErrors[err.path] = err.message;
-            })
-
-            return res.status(400).json({ error: validationErrors })
-        }
-
         const novoAdotante = new AdotanteEntity(nome, senha, celular, foto, endereco);
+        
         await this.repository.criaAdotante(novoAdotante);
+
         return res
             .status(201)
             .json({ data: { id: novoAdotante.id, nome, celular } });        
