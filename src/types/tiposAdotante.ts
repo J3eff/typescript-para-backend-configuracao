@@ -1,7 +1,7 @@
 import AdotanteEntity from "../entities/AdotanteEntity";
 
 //Omit: Deixamos claro o que sera omitido.
-type TipoRequestBodyAdotante = Omit<AdotanteEntity, "id">;
+type TipoRequestBodyAdotante = Omit<AdotanteEntity, "id" | "pets">;
 
 type TipoRequestParamsAdotante = { id?:string };
 
