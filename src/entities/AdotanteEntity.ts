@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import EnderecoEntity from "./Endereco";
+import PetEntity from "./PetEntity";
 
 @Entity()
 export default class AdotanteEntity {
@@ -21,7 +22,10 @@ export default class AdotanteEntity {
         eager: true,
       })
     @JoinColumn()
-    endereco?: EnderecoEntity;
+    endereco?: EnderecoEntity;  
+
+    @OneToMany(() => PetEntity, (pet) => pet.adotante)
+    pets!: PetEntity[]
 
     constructor(
         nome: string,
