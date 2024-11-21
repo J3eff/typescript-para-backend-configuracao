@@ -24,10 +24,16 @@ export default class AdotanteController {
         let bodyValidated:TipoRequestBodyAdotante
 
         try {
-            bodyValidated = await adotanteBodyValidator.validate(req.body)
+            bodyValidated = await adotanteBodyValidator.validate(req.body,  { abortEarly: false })
         } catch (error) {
             const yupErrors = error as yup.ValidationError;
-            return res.status(400).json({ error: yupErrors.message })
+            const validationErrors: Record<string, string>= {};
+            yupErrors.inner.forEach(err =>  {
+                if(!err.path) return;
+                validationErrors[err.path] = err.message;
+            })
+
+            return res.status(400).json({ error: validationErrors })
         }
 
         const novoAdotante = new AdotanteEntity(nome, senha, celular, foto, endereco);
