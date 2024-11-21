@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import type TipoPet from "../types/TipoPet";
 import EnumEspecie from "../enum/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
+import PetEntity from "../entities/PetEntity";
 
 let listaDePets: Array<TipoPet> = [];
 
@@ -15,12 +16,18 @@ export default class PetController {
     constructor(private repository: PetRepository) {}
 
     criaPet(req: Request, res: Response) {
-        const { adotado, dataDeNascimento, especie, nome} = <TipoPet>req.body;
+        const { adotado, dataDeNascimento, especie, nome} = <PetEntity>req.body;
         
         if(!Object.values(EnumEspecie).includes(especie))
             return res.status(400).json({ error: "Especie inválida!"})
 
-        const novoPet = { id: geraId(), adotado, dataDeNascimento, especie, nome };
+        const novoPet = new PetEntity();
+        novoPet.id = geraId();
+        novoPet.adotado = adotado;
+        novoPet.dataDeNascimento = dataDeNascimento;
+        novoPet.especie = especie;
+        novoPet.nome = nome;
+
         this.repository.criarPet(novoPet);
         return res.status(201).json(novoPet);
     } 
