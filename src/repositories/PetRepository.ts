@@ -84,11 +84,6 @@ export default class PetRepository implements InterfacePetRepository {
         await this.petRepository.save(pet);
         return { success: true };
     }
-    
-    async buscaPetPeloPorte(porte: EnumPorte): Promise<PetEntity[]> {
-        const pets = await this.petRepository.find({ where: { porte }})
-        return pets;
-    }
 
     async buscaPetPorCoampoGenerico<Tipo extends keyof PetEntity>(campo: Tipo, valor: PetEntity[Tipo]): Promise<PetEntity[]> {
         const pets = await this.petRepository.find({ where: { [campo]:valor} })
