@@ -67,4 +67,14 @@ export default class PetController {
         const listaDePets = await this.repository.buscaPetPeloPorte(porte as EnumPorte);
         return res.status(200).json(listaDePets);
     }
+
+    async buscaPetPorCoampoGenerico(req: Request, res: Response) {
+        const { campo, valor } = req.query;
+        const listaDePets = await this.repository.buscaPetPorCoampoGenerico(
+            campo as keyof PetEntity,
+            valor as string
+        );
+
+        return res.status(200).json(listaDePets);
+    }
 }

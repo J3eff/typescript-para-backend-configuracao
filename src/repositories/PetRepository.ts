@@ -14,7 +14,7 @@ export default class PetRepository implements InterfacePetRepository {
     ) {
         this.petRepository = petRepository;
         this.adotanteRepository = adotanteRepository;
-    }    
+    }  
 
     criarPet(pet: PetEntity): void {
         this.petRepository.save(pet);
@@ -87,6 +87,11 @@ export default class PetRepository implements InterfacePetRepository {
     
     async buscaPetPeloPorte(porte: EnumPorte): Promise<PetEntity[]> {
         const pets = await this.petRepository.find({ where: { porte }})
+        return pets;
+    }
+
+    async buscaPetPorCoampoGenerico<Tipo extends keyof PetEntity>(campo: Tipo, valor: PetEntity[Tipo]): Promise<PetEntity[]> {
+        const pets = await this.petRepository.find({ where: { [campo]:valor} })
         return pets;
     }
 }
