@@ -14,12 +14,12 @@ export default class AdotanteController {
         const { nome, senha, celular, foto, endereco } = req.body as AdotanteEntity; 
 
         const novoAdotante = new AdotanteEntity(nome, senha, celular, foto, endereco);
-        
+
         await this.repository.criaAdotante(novoAdotante);
 
         return res
             .status(201)
-            .json({ data: { id: novoAdotante.id, nome, celular } });        
+            .json({ data: { id: novoAdotante.id, nome, celular, endereco } });        
     }
 
     async atualizaAdotante(
@@ -43,7 +43,8 @@ export default class AdotanteController {
             return {
                 id: adotante.id,
                 nome: adotante.nome,
-                celular: adotante.celular
+                celular: adotante.celular,
+                endereco: adotante.endereco !== null ? adotante.endereco : undefined
             }
         })
 
@@ -64,14 +65,14 @@ export default class AdotanteController {
     }
 
     async atualizaEnderecoAdotante(
-        req: Request<TipoRequestParamsAdotante,{},TipoRequestBodyAdotante>, 
+        req: Request<TipoRequestParamsAdotante,{},EnderecoEntity>, 
         res: Response<TipoResponseBodyAdotante>
     ) {
         const { id } = req.params;
     
         const { success, message } = await this.repository.atualizaEnderecoAdotante(
             Number(id),
-            req.body.endereco as EnderecoEntity
+            req.body
         );
     
         if (!success)  return res.status(404).json({ error: message });
