@@ -13,3 +13,4 @@ export const erroMiddleware = (
     res.status(statusCode).json({ mensagem });
     return next();
 };
+
