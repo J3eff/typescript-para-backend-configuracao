@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import EnumEspecie from "../enum/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
 import PetEntity from "../entities/PetEntity";
-import EnumPorte from "../enum/EnumPorte";
 import { TipoRequestBodyPet, TipoRequestParamsPet, TipoResponseBodyPet } from "../types/tiposPet";
 
 export default class PetController {
@@ -38,12 +36,8 @@ export default class PetController {
         req: Request<TipoRequestParamsPet, {}, TipoRequestBodyPet>,
         res: Response<TipoResponseBodyPet>
     ) {
-        const { id } = req.params;
-        const { success, message } = await this.repository.atualizaPet(Number(id),req.body as PetEntity);
-
-        if(!success)
-            return res.status(404).json({ erros: message })
-
+        const { id } = req.params;        
+        await this.repository.atualizaPet(Number(id), req.body as PetEntity);
         return res.sendStatus(204);
     }
 
@@ -52,10 +46,7 @@ export default class PetController {
         res: Response<TipoResponseBodyPet>
     ) {
         const { id } = req.params;
-        const { success, message } = await this.repository.deletaPet(Number(id));
-
-        if(!success) return res.status(404).json({ erros: message });
-
+        await this.repository.deletaPet(Number(id));
         return res.sendStatus(200);
     }
 
@@ -64,14 +55,7 @@ export default class PetController {
         res: Response<TipoResponseBodyPet>
     ) {
         const { pet_id, adotante_id } = req.params;
-
-        const { success, message } = await this.repository.adotaPet(
-            Number(pet_id),
-            Number(adotante_id)
-        );
-
-        if(!success) return res.status(404).json({ erros: message })
-
+        await this.repository.adotaPet(Number(pet_id), Number(adotante_id));
         return res.sendStatus(204);
     }
 
@@ -81,7 +65,6 @@ export default class PetController {
             campo as keyof PetEntity,
             valor as string
         );
-
         return res.status(200).json(listaDePets);
     }
 }
