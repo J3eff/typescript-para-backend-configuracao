@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import EnderecoEntity from "./Endereco";
 import PetEntity from "./PetEntity";
 import { criarSenhaCriptografada } from "../utils/senhaCriptografada";
@@ -11,7 +11,7 @@ export default class AdotanteEntity {
     nome: string;
     @Column()
     senha: string;
-    @Column()
+    @Column({ unique: true })
     celular: string;
     @Column({ nullable: true })
     foto?: string;
